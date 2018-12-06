@@ -13,6 +13,8 @@ private:
 	
 	std::string ipAddress;
 
+	virtual int ProcessPacket(const RakNet::Packet * const packet, const unsigned int packetIndex) const;
+
 public:
 	enum PacketDefinitions
 	{

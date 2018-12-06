@@ -42,6 +42,16 @@ extern "C"
 	}
 
 	__declspec(dllexport)
+	char* testReturn(int* length)
+	{
+		char* string = "success_return_string";
+		*length = sizeof(string);
+		return string;
+	}
+
+	/* Networking Functions */
+
+	__declspec(dllexport)
 	int StartNetworking(char* address)
 	{
 		networkManager = NetworkManager::getInstance();
@@ -99,12 +109,12 @@ extern "C"
 		case NetworkManager::SEND_NETWORK_INT:
 			{
 				RakNet::Time time;
-				int data;
+				RakNet::RakString data;
 				RakNet::BitStream bsIn(packet->data, packet->length, false);
 				bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 				bsIn.Read(time);
 				bsIn.Read(data);
-				char* returnValue = (char*)data;
+				char* returnValue = (char*)data.C_String();
 				*length = sizeof(data);
 				return returnValue;
 			}
@@ -112,6 +122,8 @@ extern "C"
 		default:
 			break;
 		}
+
+		return "no_data_received";
 	}
 
 	/* Functions for sending data over the network */
