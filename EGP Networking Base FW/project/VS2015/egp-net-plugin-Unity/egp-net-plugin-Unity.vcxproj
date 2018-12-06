@@ -186,10 +186,12 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\source\egp-net-plugin-Unity\egp-net-plugin-config.h" />
     <ClInclude Include="..\..\..\source\egp-net-plugin-Unity\egp-net-plugin.h" />
+    <ClInclude Include="..\..\..\source\egp-net-plugin-Unity\NetworkManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\source\egp-net-plugin-Unity\egp-net-plugin-dllmain.cpp" />
     <ClCompile Include="..\..\..\source\egp-net-plugin-Unity\egp-net-plugin.cpp" />
+    <ClCompile Include="..\..\..\source\egp-net-plugin-Unity\NetworkManager.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

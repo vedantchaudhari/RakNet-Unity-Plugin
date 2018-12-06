@@ -19,6 +19,9 @@ public:
 		ID_DEFAULT_MESSAGE = ID_USER_PACKET_ENUM,
 		UPDATE_GAME_STATE,		// Server -> Client
 		UPDATE_PLAYER_POSITION,	// Client -> Server
+
+		// Test Messages
+		SEND_NETWORK_INT,		// Client -> Client?
 	};
 
 	// Constructor
@@ -29,11 +32,14 @@ public:
 
 	/* Getters */
 	static NetworkManager* getInstance();
-	inline int GetNumOfPlayers() { return mp_peer->NumberOfConnections(); };
+	inline int getNumOfPlayers() { return mp_peer->NumberOfConnections(); };
 	inline RakNet::RakPeerInterface* getPeer() { return mp_peer; };
 
 	/* Setters */
 	inline void setIP(std::string ipAddress) { this->ipAddress = ipAddress; };
+
+	/* Send data over the network */
+	void sendBitStream(RakNet::BitStream* bs, int peer = -1) const;
 };
 
 #endif	// !__NETWORKMANAGER_H
