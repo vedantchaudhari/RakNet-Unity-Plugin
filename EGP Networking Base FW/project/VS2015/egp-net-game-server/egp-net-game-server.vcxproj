@@ -18,6 +18,12 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Data.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="server-main.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{69C53C5A-923F-4101-8135-D3874275698B}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
@@ -171,15 +177,6 @@
       <AdditionalDependencies>egp-net-framework.lib;RakNet.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\..\source\egp-net-game-server\egp-net-game-server-main.cpp" />
-    <ClCompile Include="..\..\..\source\egp-net-game-server\fw\egpNetMasterServerPeerManager.cpp" />
-    <ClCompile Include="..\..\..\source\egp-net-game-server\fw\egpNetServerPeerManager.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\..\source\egp-net-game-server\fw\egpNetMasterServerPeerManager.h" />
-    <ClInclude Include="..\..\..\source\egp-net-game-server\fw\egpNetServerPeerManager.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -6,6 +6,10 @@ NetworkManager::~NetworkManager() {}
 
 int NetworkManager::ProcessPacket(const RakNet::Packet *const packet, const unsigned int packetIndex) const
 {
+	switch (packet->data[0])
+	{
+
+	}
 	return 0;
 }
 

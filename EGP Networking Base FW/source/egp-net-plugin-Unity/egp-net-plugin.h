@@ -13,6 +13,4 @@
 
 #include "egp-net-plugin-config.h"
 
-
-
 #endif	// !_EGP_NET_PLUGIN_H_
