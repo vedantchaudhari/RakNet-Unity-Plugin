@@ -1,0 +1,133 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "egp-raknet-console", "..\..\egp-raknet-console\egp-raknet-console.vcxproj", "{5EC9C5FE-41CA-468B-9831-2B1E6BA2A614}"
+	GlobalSection(HgVSProperties) = preSolution
+		SolutionIsControlled = True
+		SolutionBindings = <Solution Location In Database>
+	EndGlobalSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "egp-mancala", "..\..\egp-mancala\egp-mancala.vcxproj", "{EC45CCE7-AA36-4C77-AD96-F7FB4AF6A49C}"
+	GlobalSection(HgVSProperties) = preSolution
+		SolutionIsControlled = True
+		SolutionBindings = <Solution Location In Database>
+	EndGlobalSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "egp-net-framework", "..\..\egp-net-framework\egp-net-framework.vcxproj", "{4C7EB86C-6A0B-4C25-A7A9-E83033DC6A94}"
+	GlobalSection(HgVSProperties) = preSolution
+		SolutionIsControlled = True
+		SolutionBindings = <Solution Location In Database>
+	EndGlobalSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "egp-net-plugin-Unity", "..\..\egp-net-plugin-Unity\egp-net-plugin-Unity.vcxproj", "{D9D99729-99E0-427B-9289-7872A87B6AB8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4C7EB86C-6A0B-4C25-A7A9-E83033DC6A94} = {4C7EB86C-6A0B-4C25-A7A9-E83033DC6A94}
+	EndProjectSection
+	GlobalSection(HgVSProperties) = preSolution
+		SolutionIsControlled = True
+		SolutionBindings = <Solution Location In Database>
+	EndGlobalSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "egp-net-plugin-Unity-TEST", "..\..\egp-net-plugin-Unity-TEST\egp-net-plugin-Unity-TEST.vcxproj", "{9E337BB0-1120-4BF4-8B8C-D5CE99C5B36E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D9D99729-99E0-427B-9289-7872A87B6AB8} = {D9D99729-99E0-427B-9289-7872A87B6AB8}
+		{4C7EB86C-6A0B-4C25-A7A9-E83033DC6A94} = {4C7EB86C-6A0B-4C25-A7A9-E83033DC6A94}
+	EndProjectSection
+	GlobalSection(HgVSProperties) = preSolution
+		SolutionIsControlled = True
+		SolutionBindings = <Solution Location In Database>
+	EndGlobalSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "egp-net-game-server", "..\..\egp-net-game-server\egp-net-game-server.vcxproj", "{69C53C5A-923F-4101-8135-D3874275698B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4C7EB86C-6A0B-4C25-A7A9-E83033DC6A94} = {4C7EB86C-6A0B-4C25-A7A9-E83033DC6A94}
+	EndProjectSection
+	GlobalSection(HgVSProperties) = preSolution
+		SolutionIsControlled = True
+		SolutionBindings = <Solution Location In Database>
+	EndGlobalSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "egp-net-game-client", "..\..\egp-net-game-client\egp-net-game-client.vcxproj", "{8385170D-AE99-4E35-86E2-78584C846A8B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4C7EB86C-6A0B-4C25-A7A9-E83033DC6A94} = {4C7EB86C-6A0B-4C25-A7A9-E83033DC6A94}
+	EndProjectSection
+	GlobalSection(HgVSProperties) = preSolution
+		SolutionIsControlled = True
+		SolutionBindings = <Solution Location In Database>
+	EndGlobalSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5EC9C5FE-41CA-468B-9831-2B1E6BA2A614}.Debug|x64.ActiveCfg = Debug|x64
+		{5EC9C5FE-41CA-468B-9831-2B1E6BA2A614}.Debug|x64.Build.0 = Debug|x64
+		{5EC9C5FE-41CA-468B-9831-2B1E6BA2A614}.Debug|x86.ActiveCfg = Debug|Win32
+		{5EC9C5FE-41CA-468B-9831-2B1E6BA2A614}.Debug|x86.Build.0 = Debug|Win32
+		{5EC9C5FE-41CA-468B-9831-2B1E6BA2A614}.Release|x64.ActiveCfg = Release|x64
+		{5EC9C5FE-41CA-468B-9831-2B1E6BA2A614}.Release|x64.Build.0 = Release|x64
+		{5EC9C5FE-41CA-468B-9831-2B1E6BA2A614}.Release|x86.ActiveCfg = Release|Win32
+		{5EC9C5FE-41CA-468B-9831-2B1E6BA2A614}.Release|x86.Build.0 = Release|Win32
+		{EC45CCE7-AA36-4C77-AD96-F7FB4AF6A49C}.Debug|x64.ActiveCfg = Debug|x64
+		{EC45CCE7-AA36-4C77-AD96-F7FB4AF6A49C}.Debug|x64.Build.0 = Debug|x64
+		{EC45CCE7-AA36-4C77-AD96-F7FB4AF6A49C}.Debug|x86.ActiveCfg = Debug|Win32
+		{EC45CCE7-AA36-4C77-AD96-F7FB4AF6A49C}.Debug|x86.Build.0 = Debug|Win32
+		{EC45CCE7-AA36-4C77-AD96-F7FB4AF6A49C}.Release|x64.ActiveCfg = Release|x64
+		{EC45CCE7-AA36-4C77-AD96-F7FB4AF6A49C}.Release|x64.Build.0 = Release|x64
+		{EC45CCE7-AA36-4C77-AD96-F7FB4AF6A49C}.Release|x86.ActiveCfg = Release|Win32
+		{EC45CCE7-AA36-4C77-AD96-F7FB4AF6A49C}.Release|x86.Build.0 = Release|Win32
+		{4C7EB86C-6A0B-4C25-A7A9-E83033DC6A94}.Debug|x64.ActiveCfg = Debug|x64
+		{4C7EB86C-6A0B-4C25-A7A9-E83033DC6A94}.Debug|x64.Build.0 = Debug|x64
+		{4C7EB86C-6A0B-4C25-A7A9-E83033DC6A94}.Debug|x86.ActiveCfg = Debug|Win32
+		{4C7EB86C-6A0B-4C25-A7A9-E83033DC6A94}.Debug|x86.Build.0 = Debug|Win32
+		{4C7EB86C-6A0B-4C25-A7A9-E83033DC6A94}.Release|x64.ActiveCfg = Release|x64
+		{4C7EB86C-6A0B-4C25-A7A9-E83033DC6A94}.Release|x64.Build.0 = Release|x64
+		{4C7EB86C-6A0B-4C25-A7A9-E83033DC6A94}.Release|x86.ActiveCfg = Release|Win32
+		{4C7EB86C-6A0B-4C25-A7A9-E83033DC6A94}.Release|x86.Build.0 = Release|Win32
+		{D9D99729-99E0-427B-9289-7872A87B6AB8}.Debug|x64.ActiveCfg = Debug|x64
+		{D9D99729-99E0-427B-9289-7872A87B6AB8}.Debug|x64.Build.0 = Debug|x64
+		{D9D99729-99E0-427B-9289-7872A87B6AB8}.Debug|x86.ActiveCfg = Debug|Win32
+		{D9D99729-99E0-427B-9289-7872A87B6AB8}.Debug|x86.Build.0 = Debug|Win32
+		{D9D99729-99E0-427B-9289-7872A87B6AB8}.Release|x64.ActiveCfg = Release|x64
+		{D9D99729-99E0-427B-9289-7872A87B6AB8}.Release|x64.Build.0 = Release|x64
+		{D9D99729-99E0-427B-9289-7872A87B6AB8}.Release|x86.ActiveCfg = Release|Win32
+		{D9D99729-99E0-427B-9289-7872A87B6AB8}.Release|x86.Build.0 = Release|Win32
+		{9E337BB0-1120-4BF4-8B8C-D5CE99C5B36E}.Debug|x64.ActiveCfg = Debug|x64
+		{9E337BB0-1120-4BF4-8B8C-D5CE99C5B36E}.Debug|x64.Build.0 = Debug|x64
+		{9E337BB0-1120-4BF4-8B8C-D5CE99C5B36E}.Debug|x86.ActiveCfg = Debug|Win32
+		{9E337BB0-1120-4BF4-8B8C-D5CE99C5B36E}.Debug|x86.Build.0 = Debug|Win32
+		{9E337BB0-1120-4BF4-8B8C-D5CE99C5B36E}.Release|x64.ActiveCfg = Release|x64
+		{9E337BB0-1120-4BF4-8B8C-D5CE99C5B36E}.Release|x64.Build.0 = Release|x64
+		{9E337BB0-1120-4BF4-8B8C-D5CE99C5B36E}.Release|x86.ActiveCfg = Release|Win32
+		{9E337BB0-1120-4BF4-8B8C-D5CE99C5B36E}.Release|x86.Build.0 = Release|Win32
+		{69C53C5A-923F-4101-8135-D3874275698B}.Debug|x64.ActiveCfg = Debug|x64
+		{69C53C5A-923F-4101-8135-D3874275698B}.Debug|x64.Build.0 = Debug|x64
+		{69C53C5A-923F-4101-8135-D3874275698B}.Debug|x86.ActiveCfg = Debug|Win32
+		{69C53C5A-923F-4101-8135-D3874275698B}.Debug|x86.Build.0 = Debug|Win32
+		{69C53C5A-923F-4101-8135-D3874275698B}.Release|x64.ActiveCfg = Release|x64
+		{69C53C5A-923F-4101-8135-D3874275698B}.Release|x64.Build.0 = Release|x64
+		{69C53C5A-923F-4101-8135-D3874275698B}.Release|x86.ActiveCfg = Release|Win32
+		{69C53C5A-923F-4101-8135-D3874275698B}.Release|x86.Build.0 = Release|Win32
+		{8385170D-AE99-4E35-86E2-78584C846A8B}.Debug|x64.ActiveCfg = Debug|x64
+		{8385170D-AE99-4E35-86E2-78584C846A8B}.Debug|x64.Build.0 = Debug|x64
+		{8385170D-AE99-4E35-86E2-78584C846A8B}.Debug|x86.ActiveCfg = Debug|Win32
+		{8385170D-AE99-4E35-86E2-78584C846A8B}.Debug|x86.Build.0 = Debug|Win32
+		{8385170D-AE99-4E35-86E2-78584C846A8B}.Release|x64.ActiveCfg = Release|x64
+		{8385170D-AE99-4E35-86E2-78584C846A8B}.Release|x64.Build.0 = Release|x64
+		{8385170D-AE99-4E35-86E2-78584C846A8B}.Release|x86.ActiveCfg = Release|Win32
+		{8385170D-AE99-4E35-86E2-78584C846A8B}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(HgVSProperties) = preSolution
+		SolutionIsControlled = True
+		SolutionBindings = <Solution Location In Database>
+	EndGlobalSection
+EndGlobal

@@ -67,6 +67,6 @@ extern "C"
 	__declspec(dllexport)
 	int SendInteger(char* guid, int guidLength, int data)
 	{
-		RakNet::BitStream bsOut;
+		RakNet::BitStream bsOut;	
 	}
 }
