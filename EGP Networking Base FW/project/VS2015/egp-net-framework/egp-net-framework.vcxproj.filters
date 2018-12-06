@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\egp-net">
+      <UniqueIdentifier>{65339d5c-0d2e-42d6-9097-62d1de520b5e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\egp-net">
+      <UniqueIdentifier>{2fc39f2a-1013-409d-bb64-e6a81db479ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\egp-net\fw">
+      <UniqueIdentifier>{5346c83c-95be-49b7-a940-886077dd6504}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\egp-net\fw">
+      <UniqueIdentifier>{855eaf7e-a1b6-49d1-9b10-ecdf4bdff7fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\egp-net\fw\utils">
+      <UniqueIdentifier>{7ceb2d89-cfc9-44ad-ba9a-24cea1ac45c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\egp-net\fw\utils">
+      <UniqueIdentifier>{70dfe0f7-7084-4726-9865-63fea5fc2d14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\egp-net\fw\utils\_inl">
+      <UniqueIdentifier>{b1649d58-ab4e-4fb2-9e79-087372bd4479}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\egp-net\egp-net.h">
+      <Filter>Header Files\egp-net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\egp-net\fw\egpDummyClass.h">
+      <Filter>Header Files\egp-net\fw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\egp-net\fw\egpNetPeerManager.h">
+      <Filter>Header Files\egp-net\fw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\egp-net\fw\utils\egpThread.h">
+      <Filter>Header Files\egp-net\fw\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\egp-net\fw\utils\egpTimer.h">
+      <Filter>Header Files\egp-net\fw\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\egp-net\fw\utils\egpInput.h">
+      <Filter>Header Files\egp-net\fw\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\egp-net\fw\egpNetSerializableData.h">
+      <Filter>Header Files\egp-net\fw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\egp-net\fw\egpNetSerializableDataExample.h">
+      <Filter>Header Files\egp-net\fw</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\source\egp-net-framework\egp-net\egp-net.cpp">
+      <Filter>Source Files\egp-net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\egp-net-framework\egp-net\fw\egpDummyClass.cpp">
+      <Filter>Source Files\egp-net\fw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\egp-net-framework\egp-net\fw\egpNetPeerManager.cpp">
+      <Filter>Source Files\egp-net\fw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\egp-net-framework\egp-net\fw\utils\egpThread.c">
+      <Filter>Source Files\egp-net\fw\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\egp-net-framework\egp-net\fw\egpNetSerializableDataExample.cpp">
+      <Filter>Source Files\egp-net\fw</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\include\egp-net\fw\utils\_inl\egpInput.inl">
+      <Filter>Header Files\egp-net\fw\utils\_inl</Filter>
+    </None>
+    <None Include="..\..\..\include\egp-net\fw\utils\_inl\egpTimer.inl">
+      <Filter>Header Files\egp-net\fw\utils\_inl</Filter>
+    </None>
+  </ItemGroup>
+</Project>
