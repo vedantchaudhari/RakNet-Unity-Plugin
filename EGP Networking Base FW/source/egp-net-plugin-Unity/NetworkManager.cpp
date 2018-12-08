@@ -1,25 +1,51 @@
 #include "NetworkManager.h"
-#include <iostream>
 
-NetworkManager::NetworkManager() {}
-NetworkManager::~NetworkManager() {}
+RakNet::RakPeerInterface* clientPeer;
+unsigned short port = 1111;
 
-int NetworkManager::ProcessPacket(const RakNet::Packet *const packet, const unsigned int packetIndex) const
+__declspec(dllexport)
+void init()
 {
-	switch (packet->data[0])
+	clientPeer = RakNet::RakPeerInterface::GetInstance();
+}
+
+__declspec(dllexport)
+void connectToServer(char* ip)
+{
+	RakNet::SocketDescriptor sd;
+	clientPeer->Startup(1, &sd, 1);
+	char address[512];
+	strcpy(address, ip);
+	clientPeer->Connect(address, port, 0, 0);
+}
+
+__declspec(dllexport)
+DataType receive()
+{
+	RakNet::Packet* packet;
+
+	for (packet = clientPeer->Receive(); packet; clientPeer->DeallocatePacket(packet), packet = clientPeer->Receive())
 	{
+		switch (packet->data[0])
+		{
+		case ID_REQUEST_INITIAL_DATA:
+			{
+				const DefaultMessage* receivedData = (DefaultMessage*)packet->data;  
+				return ClientDataRequest;
+			}
+			break;
+		case ID_UPDATE_GAMESTATE:
+			{
+				const PlayerDataMessage* receivedData = (PlayerDataMessage*)packet->data;
 
+				return PlayerData;
+			}
+			break;
+		default:
+			return Default;
+			break;
+		}
 	}
-	return 0;
-}
 
-void NetworkManager::sendBitStream(RakNet::BitStream* bs, int peer) const
-{
-	SendPacket(bs, peer, true, true);
-}
-
-NetworkManager* NetworkManager::getInstance()
-{
-	static NetworkManager instance;
-	return &instance;
+	return Nil;
 }

@@ -15,7 +15,7 @@ int main()
 {
 	const float tick_rate = 60.0f;
 
-	unsigned int maxClients = 2;
+	unsigned int maxClients = 4;
 	unsigned short port = 1111;
 
 	RakNet::RakPeerInterface* peer = RakNet::RakPeerInterface::GetInstance();
@@ -26,14 +26,46 @@ int main()
 	std::cout << "Server is starting up..." << std::endl;
 	peer->SetMaximumIncomingConnections(maxClients);
 	std::cout << "Maximum incoming connections: " << maxClients << std::endl;
-
+	std::cout << "Server is online and accepting packets with ip " << peer->GetLocalIP(0) << std::endl;
+	
 	while (1)
 	{
 		for (packet = peer->Receive(); packet; peer->DeallocatePacket(packet), packet = peer->Receive())
 		{
 			switch (packet->data[0])
 			{
-
+			case ID_DEFAULT_MESSAGE:
+				break;
+			case ID_CONNECTION_LOST:
+				std::cout << "WARNING: SERVER CONNECTION LOST" << std::endl;
+				break;
+			case ID_DISCONNECTION_NOTIFICATION:
+				std::cout << "WARNING: SERVER HAS DISCONNECTED" << std::endl;
+				break;
+			case ID_NEW_INCOMING_CONNECTION:
+				std::cout << "A connection is incoming with system address: " << packet->systemAddress.ToString() << std::endl;
+				break;
+			case ID_NO_FREE_INCOMING_CONNECTIONS:
+				std::cout << "The server is full" << std::endl;
+			case ID_REMOTE_CONNECTION_LOST:
+				std::cout << "Another client has lost the connection | system address: " << packet->systemAddress.ToString() << std::endl;
+				break;
+			case ID_REMOTE_DISCONNECTION_NOTIFICATION:
+				std::cout << "A client has disconnected" << std::endl;
+				break;
+			case ID_REMOTE_NEW_INCOMING_CONNECTION:
+				{
+					// ****TODO: Create a packet and send to client asking for initial player data
+					std::cout << "Another client has connected with system address: " << packet->systemAddress.ToString() << std::endl;
+					DefaultMessage msg[1];
+					msg->typeID = ID_REQUEST_INITIAL_DATA;
+					strcpy(msg->msg, "Client Data Request");
+					peer->Send((char*)msg, sizeof(DefaultMessage), HIGH_PRIORITY, RELIABLE_ORDERED, 0, packet->systemAddress, false);
+				}
+				break;
+			default:
+				std::cout << "A message with identifier " << packet->data[0] << " from system address " << packet->systemAddress.ToString() << " has been received" << std::endl;
+				break;
 			}
 		}
 	}

@@ -1,0 +1,5 @@
+﻿  NetworkManager.cpp
+NetworkManager.obj : error LNK2005: players already defined in egp-net-plugin.obj
+NetworkManager.obj : error LNK2005: maxClients already defined in egp-net-plugin.obj
+     Creating library C:\Users\vedan\Desktop\RakNet-Unity-Plugin\EGP Networking Base FW\lib\x64\v141\Debug\egp-net-plugin-Unity.lib and object C:\Users\vedan\Desktop\RakNet-Unity-Plugin\EGP Networking Base FW\lib\x64\v141\Debug\egp-net-plugin-Unity.exp
+C:\Users\vedan\Desktop\RakNet-Unity-Plugin\EGP Networking Base FW\lib\x64\v141\Debug\egp-net-plugin-Unity.dll : fatal error LNK1169: one or more multiply defined symbols found

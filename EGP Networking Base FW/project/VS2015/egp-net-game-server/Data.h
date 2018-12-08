@@ -9,6 +9,7 @@
 	retain a copy of the project on its database.
 */
 
+
 #ifndef __DATA_H
 #define __DATA_H
 
@@ -25,13 +26,25 @@
 #include "RakNet/RakNetTypes.h"
 #include "RakNet/RakPeerInterface.h"
 
-enum NetworkMessages
+enum NetworkMessage
 {
 	ID_DEFAULT_MESSAGE = ID_USER_PACKET_ENUM,
 	ID_UPDATE_GAMESTATE,	// Send all player positions to client
 	ID_PLAYER_JOINED,		// Send spawned player to other clients
-
+	ID_CLIENT_POSITION_RECEIVED,	// Client -> Server
+	ID_CLIENT_MESSAGE,		// Message sent from client
+	ID_REQUEST_INITIAL_DATA,		// Server -> Client Server asking for initial data
+	ID_INITIAL_CLIENT_DATA,			// Client -> Server	Client sending initial player data
 };
+
+#pragma region Packet Data Structures
+#pragma pack(push, 1)
+struct DefaultMessage
+{
+	NetworkMessage typeID;
+	char msg[32];
+};
+#pragma pack(pop)
 
 #pragma pack(push, 1)
 struct GameStateUpdateMessage
@@ -39,15 +52,35 @@ struct GameStateUpdateMessage
 	unsigned char useTimeStamp = ID_TIMESTAMP;
 	RakNet::Time timeStamp;
 	
-	char typeID = ID_UPDATE_GAMESTATE;
+	NetworkMessage typeID;
 };
 #pragma pack(pop)
 
-struct PlayerData
+#pragma pack(push, 1)
+struct PlayerDataMessage
 {
+	unsigned char useTimeStamp = ID_TIMESTAMP;
+	RakNet::Time timeStamp;
+	NetworkMessage typeID;
 	int guid;
 	float x, y, z;
-
+	float rotation;
 };
+#pragma pack(pop)
+#pragma endregion
+
+#pragma region GameObject Data Structures
+struct PlayerData
+{
+	int guid = NULL;
+	float x, y, z;
+	float rotation;
+	int isAlive;
+};
+#pragma endregion
+
+#pragma region Variables
+struct PlayerData players[4];
+#pragma endregion
 
 #endif // !__DATA_H
