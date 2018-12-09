@@ -27,6 +27,7 @@ int main()
 	peer->SetMaximumIncomingConnections(maxClients);
 	std::cout << "Maximum incoming connections: " << maxClients << std::endl;
 	std::cout << "Server is online and accepting packets with ip " << peer->GetLocalIP(0) << std::endl;
+	std::cout << "Player Data Struct size: " << sizeof(PlayerDataStruct) << std::endl;
 	
 	while (1)
 	{
@@ -44,6 +45,11 @@ int main()
 				break;
 			case ID_NEW_INCOMING_CONNECTION:
 				std::cout << "A connection is incoming with system address: " << packet->systemAddress.ToString() << std::endl;
+				DefaultMessage msg[1];
+				msg->typeID = ID_REQUEST_INITIAL_DATA;
+				strcpy(msg->msg, "Client Data Request");
+				peer->Send((char*)msg, sizeof(DefaultMessage), HIGH_PRIORITY, RELIABLE_ORDERED, 0, packet->systemAddress, false);
+				std::cout << "Requesting initial client data from " << packet->systemAddress.ToString() << std::endl;
 				break;
 			case ID_NO_FREE_INCOMING_CONNECTIONS:
 				std::cout << "The server is full" << std::endl;
@@ -52,16 +58,6 @@ int main()
 				break;
 			case ID_REMOTE_DISCONNECTION_NOTIFICATION:
 				std::cout << "A client has disconnected" << std::endl;
-				break;
-			case ID_REMOTE_NEW_INCOMING_CONNECTION:
-				{
-					// ****TODO: Create a packet and send to client asking for initial player data
-					std::cout << "Another client has connected with system address: " << packet->systemAddress.ToString() << std::endl;
-					DefaultMessage msg[1];
-					msg->typeID = ID_REQUEST_INITIAL_DATA;
-					strcpy(msg->msg, "Client Data Request");
-					peer->Send((char*)msg, sizeof(DefaultMessage), HIGH_PRIORITY, RELIABLE_ORDERED, 0, packet->systemAddress, false);
-				}
 				break;
 			default:
 				std::cout << "A message with identifier " << packet->data[0] << " from system address " << packet->systemAddress.ToString() << " has been received" << std::endl;

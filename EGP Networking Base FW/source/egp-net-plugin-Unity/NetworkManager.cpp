@@ -20,7 +20,7 @@ void connectToServer(char* ip)
 }
 
 __declspec(dllexport)
-DataType receive()
+int receive()
 {
 	RakNet::Packet* packet;
 
@@ -30,20 +30,16 @@ DataType receive()
 		{
 		case ID_REQUEST_INITIAL_DATA:
 			{
-				const DefaultMessage* receivedData = (DefaultMessage*)packet->data;  
+				events.push(ClientDataRequest);
 				return ClientDataRequest;
 			}
-			break;
 		case ID_UPDATE_GAMESTATE:
 			{
-				const PlayerDataMessage* receivedData = (PlayerDataMessage*)packet->data;
-
+				events.push(PlayerData);
 				return PlayerData;
 			}
-			break;
 		default:
 			return Default;
-			break;
 		}
 	}
 

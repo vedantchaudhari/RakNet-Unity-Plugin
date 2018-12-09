@@ -22,7 +22,7 @@
     <ProjectGuid>{EC45CCE7-AA36-4C77-AD96-F7FB4AF6A49C}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>egpmancala</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

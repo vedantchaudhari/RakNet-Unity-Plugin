@@ -70,17 +70,19 @@ struct PlayerDataMessage
 #pragma endregion
 
 #pragma region GameObject Data Structures
-struct PlayerData
+#pragma pack(push, 1)
+struct PlayerDataStruct
 {
 	int guid = NULL;
 	float x, y, z;
 	float rotation;
 	int isAlive;
 };
+#pragma pack(pop)
 #pragma endregion
 
 #pragma region Variables
-struct PlayerData players[4];
+struct PlayerDataStruct players[4];
 #pragma endregion
 
 #endif // !__DATA_H

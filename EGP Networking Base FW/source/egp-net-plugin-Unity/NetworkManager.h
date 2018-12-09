@@ -2,7 +2,7 @@
 #define __NETWORKMANAGER_H_
 
 #include <iostream>
-#include <vector>
+#include <queue>
 
 #include "RakNet/BitStream.h"
 #include "RakNet/MessageIdentifiers.h"
@@ -20,6 +20,7 @@ extern "C"
 		ID_UPDATE_GAMESTATE,
 		ID_PLAYER_JOINED,
 		ID_CLIENT_POSITION_RECEIVED,	// Client -> Server
+		ID_CLIENT_POSITION_UPDATE,		// Server -> Client
 		ID_CLIENT_MESSAGE,			// Message sent to server
 		ID_REQUEST_INITIAL_DATA,	// Server -> Client asking for initial data
 	};
@@ -66,24 +67,30 @@ extern "C"
 #pragma endregion
 
 #pragma region GameObject Data Structures
-	struct PlayerData
+#pragma pack(push, 1)
+	struct PlayerDataStruct
 	{
-		int guid;
-		float x, y, z;
-		float rotation;
-		int isAlive;
+		int guid = -1;
+		float x = 0;
+		float y = 0;
+		float z = 0;
+		float rotation = -1;
+		int isAlive = 0;
 	};
+#pragma pack(pop)
 #pragma endregion
 
 #pragma region Variables
-	struct PlayerData players[4];
+	struct PlayerDataStruct players[4];
 	int maxClients = 4;
+	std::queue<DataType> events;
+	std::queue<RakNet::Packet> packets;
 #pragma endregion
 
 #pragma region Functions
 	__declspec(dllexport) void init();
 	__declspec(dllexport) void connectToServer(char* ip);
-	__declspec(dllexport) DataType receive();
+	__declspec(dllexport) int receive();
 #pragma endregion
 
 #ifdef __cplusplus

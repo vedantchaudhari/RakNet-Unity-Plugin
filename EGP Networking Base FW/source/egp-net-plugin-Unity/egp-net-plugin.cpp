@@ -7,13 +7,6 @@
 */
 
 #include "egp-net-plugin.h"
-#include "NetworkManager.h"
-
-/* Raknet Headers */
-#include "RakNet/RakPeerInterface.h"
-#include "RakNet/MessageIdentifiers.h"
-#include "RakNet/RakNetTypes.h"
-#include "RakNet/BitStream.h"
 
 extern "C"
 {
