@@ -63,6 +63,16 @@ struct PlayerDataMessage
 	int guid;
 	float x, y, z;
 	float rotation;
+	int isAlive;
+};
+#pragma pack(pop)
+
+#pragma pack(push, 1)
+struct ChatMessage
+{
+	int typeID;
+	char username[32];
+	char message[512];
 };
 #pragma pack(pop)
 #pragma endregion
@@ -71,7 +81,7 @@ struct PlayerDataMessage
 #pragma pack(push, 1)
 struct PlayerDataStruct
 {
-	int guid = NULL;
+	int guid = -1;
 	float x, y, z;
 	float rotation;
 	int isAlive;
@@ -80,7 +90,7 @@ struct PlayerDataStruct
 #pragma endregion
 
 #pragma region Variables
-struct PlayerDataStruct players[4];
+struct PlayerDataStruct playerDataArr[4];
 #pragma endregion
 
 #endif // !__DATA_H

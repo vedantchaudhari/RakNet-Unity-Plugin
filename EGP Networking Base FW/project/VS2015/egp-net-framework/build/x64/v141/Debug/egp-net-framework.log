@@ -1,7 +1,1 @@
-﻿  egp-net.cpp
-  egpDummyClass.cpp
-  egpNetPeerManager.cpp
-  egpNetSerializableDataExample.cpp
-  Generating Code...
-  egpThread.c
-  egp-net-framework.vcxproj -> C:\Users\vedant.chaudhari\Desktop\egp-networking-base-2018-09\EGP Networking Base FW\lib\x64\v141\Debug\egp-net-framework.lib
+﻿  egp-net-framework.vcxproj -> C:\Users\vedant.chaudhari\Desktop\RakNet-Unity-Plugin\EGP Networking Base FW\lib\x64\v141\Debug\egp-net-framework.lib

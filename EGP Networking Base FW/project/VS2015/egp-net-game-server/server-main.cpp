@@ -61,7 +61,28 @@ int main()
 			// Custom Packet Identifiers and Handler
 			case ID_INITIAL_CLIENT_DATA:
 			{
-				
+				std::cout << "Received initial client data from " << packet->systemAddress.ToString() << std::endl;
+				PlayerDataMessage* pData = (PlayerDataMessage*)packet->data;
+				for (int iter = 0; iter < (int)maxClients; iter++)
+				{
+					if (playerDataArr[iter].guid == -1)
+					{
+						playerDataArr[iter].guid = pData->guid;
+						playerDataArr[iter].x = pData->x;
+						playerDataArr[iter].y = pData->y;
+						playerDataArr[iter].z = pData->z;
+						playerDataArr[iter].rotation = pData->rotation;
+						playerDataArr[iter].isAlive = pData->isAlive;
+					}
+					else
+					{
+						std::cout << "playerDataArr[" << iter << "] already exists with guid " << playerDataArr[iter].guid << std::endl;
+					}
+				}
+			}
+			case ID_CLIENT_MESSAGE:
+			{
+
 			}
 			default:
 				std::cout << "A message with identifier " << packet->data[0] << " from system address " << packet->systemAddress.ToString() << " has been received" << std::endl;

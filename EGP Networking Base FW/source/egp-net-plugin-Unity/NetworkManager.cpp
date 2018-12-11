@@ -5,8 +5,9 @@
 RakNet::RakPeerInterface* clientPeer;
 unsigned short port = 1111;
 
-__declspec(dllexport)
-void init()
+RakNet::SystemAddress host;
+
+__declspec(dllexport) void init()
 {
 	if (DEBUG)
 	{
@@ -19,8 +20,7 @@ void init()
 	std::cout << "init(): Initializing client peer" << std::endl;
 }
 
-__declspec(dllexport)
-void connectToServer(char* ip)
+__declspec(dllexport) void connectToServer(char* ip)
 {
 	RakNet::SocketDescriptor sd;
 	clientPeer->Startup(1, &sd, 1);
@@ -30,8 +30,7 @@ void connectToServer(char* ip)
 	clientPeer->Connect(address, port, 0, 0);
 }
 
-__declspec(dllexport)
-int receive()
+__declspec(dllexport) int receive()
 {
 	RakNet::Packet* packet;
 
@@ -41,6 +40,7 @@ int receive()
 		{
 		case ID_CONNECTION_REQUEST_ACCEPTED:
 			std::cout << "receive(): Our connection request has been accepted" << std::endl;
+			host = packet->systemAddress;
 			break;
 		case ID_REQUEST_INITIAL_DATA:
 			{
@@ -61,4 +61,18 @@ int receive()
 	}
 
 	return Nil;
+}
+
+__declspec(dllexport) void sendInitialPlayerData(int guid, float x, float y, float z, float rotation, int isAlive)
+{
+	PlayerDataMessage pDataMsg;
+	pDataMsg.typeID = ID_INITIAL_CLIENT_DATA;
+	pDataMsg.timeStamp = RakNet::GetTime();
+	pDataMsg.guid = guid;
+	pDataMsg.x = x;
+	pDataMsg.y = y;
+	pDataMsg.z = z;
+	pDataMsg.rotation = rotation;
+	pDataMsg.isAlive = isAlive;
+	clientPeer->Send((char*)&pDataMsg, sizeof(PlayerDataMessage), HIGH_PRIORITY, RELIABLE_ORDERED, 0, host, false);
 }

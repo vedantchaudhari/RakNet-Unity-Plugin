@@ -8,6 +8,7 @@
 #include "RakNet/MessageIdentifiers.h"
 #include "RakNet/RakNetTypes.h"
 #include "RakNet/RakPeerInterface.h"
+#include "RakNet/GetTime.h"
 
 #ifdef __cplusplus
 extern "C" 
@@ -60,6 +61,7 @@ extern "C"
 		int guid;
 		float x, y, z;
 		float rotation;
+		int isAlive;
 	};
 #pragma pack(pop)
 #pragma pack(push, 1)
@@ -69,8 +71,15 @@ extern "C"
 		int guid;
 		float x, y, z;
 		float rotation;
-		char name[16];
 		int isAlive;
+	};
+#pragma pack(pop)
+#pragma pack(push, 1)
+	struct ChatMessage
+	{
+		int typeID;
+		char username[32];
+		char message[512];
 	};
 #pragma pack(pop)
 #pragma endregion
@@ -101,7 +110,8 @@ extern "C"
 	__declspec(dllexport) void connectToServer(char* ip);
 	__declspec(dllexport) int receive();
 
-	__declspec(dllexport) void sendPlayerData(int guid, float x, float y, float z, float rotation, int isAlive);
+	__declspec(dllexport) void sendInitialPlayerData(int guid, float x, float y, float z, float rotation, int isAlive);
+	__declspec(dllexport) void sendMessage(char* username, char* message);
 #pragma endregion
 
 #ifdef __cplusplus
