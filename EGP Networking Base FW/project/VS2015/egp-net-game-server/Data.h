@@ -41,27 +41,25 @@ enum NetworkMessage
 #pragma pack(push, 1)
 struct DefaultMessage
 {
-	NetworkMessage typeID;
-	char msg[32];
+	int typeID;
 };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
 struct GameStateUpdateMessage
 {
+	int typeID;
 	unsigned char useTimeStamp = ID_TIMESTAMP;
 	RakNet::Time timeStamp;
-	
-	NetworkMessage typeID;
 };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
 struct PlayerDataMessage
 {
+	int typeID;
 	unsigned char useTimeStamp = ID_TIMESTAMP;
 	RakNet::Time timeStamp;
-	NetworkMessage typeID;
 	int guid;
 	float x, y, z;
 	float rotation;
