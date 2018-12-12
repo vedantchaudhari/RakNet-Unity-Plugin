@@ -19,6 +19,7 @@
 
 #include <iostream>
 #include <vector>
+#include <random>
 
 #include "RakNet/BitStream.h"
 #include "RakNet/GetTime.h"
@@ -35,6 +36,8 @@ enum NetworkMessage
 	ID_CLIENT_MESSAGE,		// Message sent from client
 	ID_REQUEST_INITIAL_DATA,		// Server -> Client Server asking for initial data
 	ID_INITIAL_CLIENT_DATA,			// Client -> Server	Client sending initial player data
+	ID_STARTGAME,
+	ID_CHAT_MESSAGE,		// Server -> All Clients, chat message
 };
 
 #pragma region Packet Data Structures
@@ -44,7 +47,13 @@ struct DefaultMessage
 	int typeID;
 };
 #pragma pack(pop)
-
+#pragma pack(push, 1)
+struct ChatMessage
+{
+	int typeID;
+	char message[512];
+};
+#pragma pack(pop)
 #pragma pack(push, 1)
 struct GameStateUpdateMessage
 {
@@ -53,7 +62,6 @@ struct GameStateUpdateMessage
 	RakNet::Time timeStamp;
 };
 #pragma pack(pop)
-
 #pragma pack(push, 1)
 struct PlayerDataMessage
 {
@@ -66,25 +74,44 @@ struct PlayerDataMessage
 	int isAlive;
 };
 #pragma pack(pop)
-
 #pragma pack(push, 1)
-struct ChatMessage
+struct InitialDataRequestMessage
 {
 	int typeID;
-	char username[32];
-	char message[512];
+	int guid;
+};
+#pragma pack(pop)
+#pragma pack(push, 1)
+struct StartGameMessage
+{
+	int typeID;
+	int start;
 };
 #pragma pack(pop)
 #pragma endregion
 
 #pragma region GameObject Data Structures
 #pragma pack(push, 1)
+struct ChatDataStruct
+{
+	char msg[512];
+};
+#pragma pack(pop)
+#pragma pack(push, 1)
+struct InitialDataRequestStruct
+{
+	int guid;
+};
+#pragma pack(pop)
+#pragma pack(push, 1)
 struct PlayerDataStruct
 {
 	int guid = -1;
-	float x, y, z;
-	float rotation;
-	int isAlive;
+	float x = 0;
+	float y = 0;
+	float z = 0;
+	float rotation = -1;
+	int isAlive = 0;
 };
 #pragma pack(pop)
 #pragma endregion
