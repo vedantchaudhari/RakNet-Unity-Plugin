@@ -13,9 +13,9 @@ retain a copy of the project on its database.
 
 int main()
 {
-	const float tick_rate = 60.0f;
+	const float tick_rate = 100.0f;	// in ms, sends every second
 
-	unsigned int maxClients = 2;
+	unsigned int maxClients = MAX_CLIENTS;
 	unsigned short port = 1111;
 
 	RakNet::RakPeerInterface* peer = RakNet::RakPeerInterface::GetInstance();
@@ -26,7 +26,10 @@ int main()
 	std::mt19937 eng(rd());
 	std::uniform_int_distribution<> distr(0, 1000);
 
+	float timeCurr, timePrev;
+
 	int numOfPlayers = 0;
+	bool isGameRunning = false;
 
 	peer->Startup(maxClients, &sd, 1);
 	std::cout << "Server is starting up..." << std::endl;
@@ -34,11 +37,18 @@ int main()
 	std::cout << "Maximum incoming connections: " << maxClients << std::endl;
 	std::cout << "Server is online and accepting packets with ip " << peer->GetLocalIP(0) << std::endl;
 	std::cout << "Chat Data Struct size:   " << sizeof(ChatDataStruct) << std::endl;
+	std::cout << "Game State Update Struct size: " << sizeof(GameStateUpdateStruct) << std::endl;
+	std::cout << "Join Game Struct size: " << sizeof(JoinGameStruct) << std::endl;
 	std::cout << "Initial Data Request Struct size: " << sizeof(InitialDataRequestStruct) << std::endl;
 	std::cout << "Player Data Struct size: " << sizeof(PlayerDataStruct) << std::endl;
-	
+	std::cout << "Start Game Struct size: " << sizeof(StartGameStruct) << std::endl;
+
+	timePrev = (float)RakNet::GetTimeMS();
+
 	while (1)
 	{
+		timeCurr = (float)RakNet::GetTimeMS();
+
 		for (packet = peer->Receive(); packet; peer->DeallocatePacket(packet), packet = peer->Receive())
 		{
 			switch (packet->data[0])
@@ -46,17 +56,20 @@ int main()
 			case ID_DEFAULT_MESSAGE:
 				break;
 			case ID_CONNECTION_LOST:
-				std::cout << "WARNING: SERVER CONNECTION LOST" << std::endl;
+				std::cout << "WARNING: PLAYER CONNECTION LOST" << std::endl;
 				break;
 			case ID_DISCONNECTION_NOTIFICATION:
 				std::cout << "WARNING: SERVER HAS DISCONNECTED" << std::endl;
 				break;
 			case ID_NEW_INCOMING_CONNECTION:
 				std::cout << "A connection is incoming with system address: " << packet->systemAddress.ToString() << std::endl;
+				numOfPlayers++;
 				InitialDataRequestMessage msg;
 				msg.typeID = ID_REQUEST_INITIAL_DATA;
 				msg.guid = (int)distr(eng);
+				msg.playerNumber = numOfPlayers;
 				std::cout << "Generated GUID: " << msg.guid << std::endl;
+				std::cout << "Player number:  " << msg.playerNumber << std::endl;
 				peer->Send((char*)&msg, sizeof(InitialDataRequestMessage), HIGH_PRIORITY, RELIABLE_ORDERED, 0, packet->systemAddress, false);
 				std::cout << "Requesting initial client data from " << packet->systemAddress.ToString() << std::endl;
 				break;
@@ -78,18 +91,49 @@ int main()
 					if (playerDataArr[iter].guid == -1)
 					{
 						playerDataArr[iter].guid = pData->guid;
+						std::cout << packet->systemAddress.ToString() << "	guid is " << playerDataArr[iter].guid << std::endl;
+						playerDataArr[iter].playerNumber = pData->playerNum;
+						std::cout << packet->systemAddress.ToString() << "	playerNumber is " << playerDataArr[iter].playerNumber << std::endl;
 						playerDataArr[iter].x = pData->x;
 						playerDataArr[iter].y = pData->y;
 						playerDataArr[iter].z = pData->z;
+						std::cout << "		Position is: " << playerDataArr[iter].x << ", " << playerDataArr[iter].y << ", "
+							<< playerDataArr[iter].z << std::endl;
 						playerDataArr[iter].rotation = pData->rotation;
+						std::cout << "		Rotation is " << playerDataArr[iter].rotation << std::endl;
 						playerDataArr[iter].isAlive = pData->isAlive;
+						std::cout << "		Alive status: " << playerDataArr[iter].isAlive << std::endl;
+						isPlayerReady[iter] = true;
+
+						/* SEND PLAYER JOINED MSG */
+						JoinGameMessage joinMsg;
+						joinMsg.typeID = ID_PLAYER_JOINED;
+						joinMsg.pData = playerDataArr[iter];
+						peer->Send((char*)&joinMsg, sizeof(JoinGameMessage), HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+						std::cout << "Player Join Event sent for guid " << joinMsg.pData.guid << " and player number: "
+							<< joinMsg.pData.playerNumber << std::endl;
+						break;
 					}
 					else
 					{
 						std::cout << "playerDataArr[" << iter << "] already exists with guid " << playerDataArr[iter].guid << std::endl;
 					}
 				}
-				numOfPlayers++;
+
+				// ****TODO: Possibly move START_GAME send here
+				// Send start game message if max amount of clients have connected
+				if (numOfPlayers == 2 && !isGameRunning)
+				{
+					// TODO: Potentially send an initial playerloadstate to all clients
+					std::cout << "Start Game sent to all clients" << std::endl;
+					StartGameMessage startMsg;
+					startMsg.typeID = ID_STARTGAME;
+					startMsg.start = 1;
+					peer->Send((char*)&startMsg, sizeof(StartGameMessage), HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+					isGameRunning = true;
+				}
+
+				break;
 			}
 			case ID_CLIENT_MESSAGE:
 			{
@@ -101,6 +145,7 @@ int main()
 				sendMsg.typeID = ID_CHAT_MESSAGE;
 				strcpy(sendMsg.message, str);
 				peer->Send((char*)&sendMsg, sizeof(ChatMessage), HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+				break;
 			}
 			default:
 				std::cout << "A message with identifier " << packet->data[0] << " from system address " << packet->systemAddress.ToString() << " has been received" << std::endl;
@@ -108,13 +153,18 @@ int main()
 			}
 		}
 
-		// Send start game message if max amount of clients have connected
-		if (numOfPlayers == maxClients)
+		/*TODO Send Game State Update*/
+		// TODO ADD CHECK FOR IF IS RUNNING
+		if (timeCurr - timePrev >= tick_rate && isGameRunning)
 		{
-			StartGameMessage startMsg;
-			startMsg.typeID = ID_STARTGAME;
-			startMsg.start = 1;
-			peer->Send((char*)&startMsg, sizeof(StartGameMessage), HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+			timePrev = timeCurr;
+			// Send mock game state update
+			GameStateUpdateMessage updateMsg;
+			updateMsg.typeID = ID_UPDATE_GAMESTATE;
+			updateMsg.timeStamp = RakNet::GetTime();
+			updateMsg.pData[0] = playerDataArr[0];
+			updateMsg.pData[1] = playerDataArr[0];
+			peer->Send((char*)&updateMsg, sizeof(GameStateUpdateMessage), HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
 		}
 	}
 }

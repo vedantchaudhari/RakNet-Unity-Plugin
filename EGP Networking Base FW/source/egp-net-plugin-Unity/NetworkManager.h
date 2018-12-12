@@ -1,6 +1,7 @@
 #ifndef __NETWORKMANAGER_H_
 #define __NETWORKMANAGER_H_
 
+#pragma region Includes
 #include <iostream>
 #include <queue>
 
@@ -9,6 +10,11 @@
 #include "RakNet/RakNetTypes.h"
 #include "RakNet/RakPeerInterface.h"
 #include "RakNet/GetTime.h"
+#pragma endregion
+
+#pragma region Constant Defines
+#define MAX_CLIENTS 2
+#pragma endregion
 
 #ifdef __cplusplus
 extern "C" 
@@ -26,6 +32,8 @@ extern "C"
 		ID_INITIAL_CLIENT_DATA,			// Client -> Server	Client sending initial player data
 		ID_STARTGAME,
 		ID_CHAT_MESSAGE,		// Server -> All Clients, chat message
+		ID_GAME_OVER,			// Server -> Clients who isAlive = false
+		ID_GAME_WON,			// Server -> Client who isAlive = true
 	};
 
 	enum DataType
@@ -34,9 +42,57 @@ extern "C"
 		Nil,
 		ChatMessageEvent,
 		ClientDataRequestEvent,
+		GameStateUpdateEvent,
 		PlayerDataEvent,
+		PlayerJoinEvent,
 		StartGameEvent,
 	};
+#pragma endregion
+
+#pragma region GameObject Data Structures
+#pragma pack(push, 1)
+	struct PlayerDataStruct
+	{
+		int guid = -1;
+		int playerNumber = -1;
+		float x = 0;
+		float y = 0;
+		float z = 0;
+		float rotation = -1;
+		int isAlive = 0;
+	};
+#pragma pack(pop)
+#pragma pack(push, 1)
+	struct ChatDataStruct
+	{
+		char msg[512];
+	};
+#pragma pack(pop)
+#pragma pack(push, 1)
+	struct GameStateUpdateStruct
+	{
+		PlayerDataStruct pData[MAX_CLIENTS];
+	};
+#pragma pack(pop)
+#pragma pack(push, 1)
+	struct InitialDataRequestStruct
+	{
+		int guid;
+		int playerNumber;
+	};
+#pragma pack(pop)
+#pragma pack(push, 1)
+	struct StartGameStruct
+	{
+		int start = 0;
+	};
+#pragma pack(pop)
+#pragma pack(push, 1)
+	struct JoinGameStruct
+	{
+		PlayerDataStruct pData;
+	};
+#pragma pack(pop)
 #pragma endregion
 	
 #pragma region Packet Data Structures
@@ -59,6 +115,7 @@ extern "C"
 		int typeID;
 		unsigned char useTimeStamp = ID_TIMESTAMP;
 		RakNet::Time timeStamp;
+		PlayerDataStruct pData[MAX_CLIENTS];
 	};
 #pragma pack(pop)
 #pragma pack(push, 1)
@@ -76,6 +133,14 @@ extern "C"
 	{
 		int typeID;
 		int guid;
+		int playerNumber;
+	};
+#pragma pack(pop)
+#pragma pack(push, 1)
+	struct JoinGameMessage
+	{
+		int typeID;
+		PlayerDataStruct pData;
 	};
 #pragma pack(pop)
 #pragma pack(push, 1)
@@ -85,6 +150,7 @@ extern "C"
 		unsigned char useTimeStamp = ID_TIMESTAMP;
 		RakNet::Time timeStamp;
 		int guid;
+		int playerNumber;
 		float x, y, z;
 		float rotation;
 		int isAlive;
@@ -99,40 +165,9 @@ extern "C"
 #pragma pack(pop)
 #pragma endregion
 
-#pragma region GameObject Data Structures
-#pragma pack(push, 1)
-	struct PlayerDataStruct
-	{
-		int guid = -1;
-		float x = 0;
-		float y = 0;
-		float z = 0;
-		float rotation = -1;
-		int isAlive = 0;
-	};
-#pragma pack(pop)
-#pragma pack(push, 1)
-	struct ChatDataStruct
-	{
-		char msg[512];
-	};
-#pragma pack(pop)
-#pragma pack(push, 1)
-	struct InitialDataRequestStruct
-	{
-		int guid;
-	};
-#pragma pack(pop)
-#pragma pack(push, 1)
-	struct StartGameStruct
-	{
-		int start = 0;
-	};
-#pragma endregion
-
 #pragma region Variables
-	struct PlayerDataStruct players[4];
-	int maxClients = 4;
+	struct PlayerDataStruct players[MAX_CLIENTS];
+	int maxClients = MAX_CLIENTS;
 	std::queue<DataType> events;
 	std::queue<RakNet::Packet> packets;
 #pragma endregion
@@ -141,14 +176,17 @@ extern "C"
 	__declspec(dllexport) void init();
 	__declspec(dllexport) void connectToServer(char* ip);
 	__declspec(dllexport) int receive();
+	__declspec(dllexport) void deinit();
 
 	/* Data Handle Functions*/
 	__declspec(dllexport) ChatDataStruct handleChatMessage(int exec);
+	__declspec(dllexport) GameStateUpdateStruct handleGameStateUpdate(int exec);
+	__declspec(dllexport) JoinGameStruct handlePlayerJoin(int exec);
 	__declspec(dllexport) InitialDataRequestStruct handleInitialData(int exec);
-	__declspec(dllexport) StartGameStruct handle_startgame(int exec);
+	__declspec(dllexport) StartGameStruct handleStartGame(int exec);
 
 	/* Data Send Functions*/
-	__declspec(dllexport) void sendInitialPlayerData(int guid, float x, float y, float z, float rotation, int isAlive);
+	__declspec(dllexport) void sendInitialPlayerData(int guid, int playerNum, float x, float y, float z, float rotation, int isAlive);
 	__declspec(dllexport) void sendMessage(char* message);
 #pragma endregion
 
