@@ -34,6 +34,7 @@ extern "C"
 		ID_CHAT_MESSAGE,		// Server -> All Clients, chat message
 		ID_GAME_OVER,			// Server -> Clients who isAlive = false
 		ID_GAME_WON,			// Server -> Client who isAlive = true
+		ID_FORCE_STATE_UPDATE,	// Client -> Server
 	};
 
 	enum DataType
@@ -43,9 +44,10 @@ extern "C"
 		ChatMessageEvent,
 		ClientDataRequestEvent,
 		GameStateUpdateEvent,
-		PlayerDataEvent,
+		PlayerDataEvent,	// Used for forced player update
 		PlayerJoinEvent,
 		StartGameEvent,
+		GameWonEvent,
 	};
 #pragma endregion
 
@@ -65,6 +67,7 @@ extern "C"
 #pragma pack(push, 1)
 	struct ChatDataStruct
 	{
+		int playerNumber = -1;
 		char msg[512];
 	};
 #pragma pack(pop)
@@ -106,6 +109,7 @@ extern "C"
 	struct ChatMessage
 	{
 		int typeID;
+		int playerNumber;
 		char message[512];
 	};
 #pragma pack(pop)
@@ -116,6 +120,13 @@ extern "C"
 		unsigned char useTimeStamp = ID_TIMESTAMP;
 		RakNet::Time timeStamp;
 		PlayerDataStruct pData[MAX_CLIENTS];
+	};
+#pragma pack(pop)
+#pragma pack(push, 1)
+	struct GameWinStruct
+	{
+		int guid;
+		int winnerNum;
 	};
 #pragma pack(pop)
 #pragma pack(push, 1)
@@ -163,6 +174,14 @@ extern "C"
 		int start;
 	};
 #pragma pack(pop)
+#pragma pack(push, 1)
+	struct GameWinMessage
+	{
+		int typeId;
+		int guid;
+		int winnerNum;
+	};
+#pragma pack(pop)
 #pragma endregion
 
 #pragma region Variables
@@ -180,14 +199,17 @@ extern "C"
 
 	/* Data Handle Functions*/
 	__declspec(dllexport) ChatDataStruct handleChatMessage(int exec);
+	__declspec(dllexport) GameStateUpdateStruct handleForcedUpdate(int exec);
 	__declspec(dllexport) GameStateUpdateStruct handleGameStateUpdate(int exec);
+	__declspec(dllexport) GameWinStruct handleWin(int exec);
 	__declspec(dllexport) JoinGameStruct handlePlayerJoin(int exec);
 	__declspec(dllexport) InitialDataRequestStruct handleInitialData(int exec);
 	__declspec(dllexport) StartGameStruct handleStartGame(int exec);
 
 	/* Data Send Functions*/
+	__declspec(dllexport) void sendCurrPlayerData(int guid, int playerNum, float x, float y, float z, float rotation, int isAlive);
 	__declspec(dllexport) void sendInitialPlayerData(int guid, int playerNum, float x, float y, float z, float rotation, int isAlive);
-	__declspec(dllexport) void sendMessage(char* message);
+	__declspec(dllexport) void sendChatMessage(int playerNum, char* message);
 #pragma endregion
 
 #ifdef __cplusplus

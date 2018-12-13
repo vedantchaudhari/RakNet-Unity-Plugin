@@ -78,6 +78,20 @@ __declspec(dllexport) int receive()
 			packets.push(*packet);
 			return StartGameEvent;
 		}
+		case ID_FORCE_STATE_UPDATE:
+		{
+			if (DEBUG)
+				std::cout << "receive(): Force State Update Received from server" << std::endl;
+			packets.push(*packet);
+			return PlayerDataEvent;
+		}
+		case ID_GAME_OVER:
+		{
+			if (DEBUG)
+				std::cout << "receive(): Game Over Message Received" << std::endl;
+			packets.push(*packet);
+			return GameWonEvent;
+		}
 		default:
 			std::cout << "receive(): Received default packet from server" << std::endl;
 			return Default;
@@ -97,11 +111,24 @@ __declspec(dllexport) void deinit()
 /* Data Handle "Fun"ctions */
 __declspec(dllexport) ChatDataStruct handleChatMessage(int exec)
 {
+	std::cout << "handleChatMessage(): ";
 	ChatMessage* chatMsg = (ChatMessage*)packets.front().data;
 	ChatDataStruct tmpChatData;
+	tmpChatData.playerNumber = chatMsg->playerNumber;
 	strcpy(tmpChatData.msg, chatMsg->message);
+	std::cout << "player: " << tmpChatData.playerNumber << " message: " << tmpChatData.msg << std::endl;
 	packets.pop();
 	return tmpChatData;
+}
+
+__declspec(dllexport) GameStateUpdateStruct handleForcedUpdate(int exec)
+{
+	GameStateUpdateMessage* stateUpdateMsg = (GameStateUpdateMessage*)packets.front().data;
+	GameStateUpdateStruct tmpStateUpdate;
+	tmpStateUpdate.pData[0] = stateUpdateMsg->pData[0];
+	tmpStateUpdate.pData[1] = stateUpdateMsg->pData[1];
+	packets.pop();
+	return tmpStateUpdate;
 }
 
 __declspec(dllexport) GameStateUpdateStruct handleGameStateUpdate(int exec)
@@ -112,6 +139,16 @@ __declspec(dllexport) GameStateUpdateStruct handleGameStateUpdate(int exec)
 	tmpStateUpdate.pData[1] = stateUpdateMsg->pData[1];
 	packets.pop();
 	return tmpStateUpdate;
+}
+
+__declspec(dllexport) GameWinStruct handleWin(int exec)
+{
+	GameWinMessage* winMsg = (GameWinMessage*)packets.front().data;
+	GameWinStruct tmpWinData;
+	tmpWinData.guid = winMsg->guid;
+	tmpWinData.winnerNum = winMsg->winnerNum;
+	packets.pop();
+	return tmpWinData;
 }
 
 __declspec(dllexport) JoinGameStruct handlePlayerJoin(int exec)
@@ -149,6 +186,22 @@ __declspec(dllexport) StartGameStruct handleStartGame(int exec)
 }
 
 /* Data Send Functions*/
+__declspec(dllexport) void sendCurrPlayerData(int guid, int playerNum, float x, float y, float z, float rotation, int isAlive)
+{
+	PlayerDataMessage pDataMsg;
+	pDataMsg.typeID = ID_CLIENT_POSITION_RECEIVED;
+	pDataMsg.timeStamp = RakNet::GetTime();
+	pDataMsg.guid = guid;
+	pDataMsg.playerNumber = playerNum;
+	pDataMsg.x = x;
+	pDataMsg.y = y;
+	pDataMsg.z = z;
+	pDataMsg.rotation = rotation;
+	pDataMsg.isAlive = isAlive;
+	clientPeer->Send((char*)&pDataMsg, sizeof(PlayerDataMessage), HIGH_PRIORITY, RELIABLE_ORDERED, 0, host, false);
+	std::cout << "sendCurrPlayerData() @time: " << RakNet::GetTimeMS() << std::endl;
+}
+
 __declspec(dllexport) void sendInitialPlayerData(int guid, int playerNum, float x, float y, float z, float rotation, int isAlive)
 {
 	PlayerDataMessage pDataMsg;
@@ -165,13 +218,12 @@ __declspec(dllexport) void sendInitialPlayerData(int guid, int playerNum, float 
 	std::cout << "sendInitialPlayerData(): initial player data sent to host @" << host.ToString() << std::endl;
 }
 
-__declspec(dllexport) void sendMessage(char* string)
+__declspec(dllexport) void sendChatMessage(int playerNum, char* string)
 {
-	char message[512];
-	strcpy(message, string);
 	ChatMessage chatMsg;
 	chatMsg.typeID = ID_CLIENT_MESSAGE;
-	strcpy(chatMsg.message, message);
+	chatMsg.playerNumber = playerNum;
+	strcpy(chatMsg.message, string);
 	clientPeer->Send((char*)&chatMsg, sizeof(ChatMessage), HIGH_PRIORITY, RELIABLE_ORDERED, 0, host, false);
 	std::cout << "sendMessage(): send chat message to host" << std::endl;
 }

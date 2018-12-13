@@ -30,6 +30,7 @@
 #pragma endregion
 
 #pragma region Constant Defines
+#define DEBUG false
 #define MAX_CLIENTS 2
 #pragma endregion
 
@@ -46,6 +47,7 @@ enum NetworkMessage
 	ID_CHAT_MESSAGE,		// Server -> All Clients, chat message
 	ID_GAME_OVER,			// Server -> Clients who isAlive = false
 	ID_GAME_WON,			// Server -> Client who isAlive = true
+	ID_FORCE_STATE_UPDATE,
 };
 
 #pragma region GameObject Data Structures
@@ -64,6 +66,7 @@ struct PlayerDataStruct
 #pragma pack(push, 1)
 struct ChatDataStruct
 {
+	int playerNumber = -1;
 	char msg[512];
 };
 #pragma pack(pop)
@@ -71,6 +74,13 @@ struct ChatDataStruct
 struct GameStateUpdateStruct
 {
 	PlayerDataStruct pData[MAX_CLIENTS];
+};
+#pragma pack(pop)
+#pragma pack(push, 1)
+struct GameWinStruct
+{
+	int guid;
+	int winnerNum;
 };
 #pragma pack(pop)
 #pragma pack(push, 1)
@@ -105,6 +115,7 @@ struct DefaultMessage
 struct ChatMessage
 {
 	int typeID;
+	int playerNumber;
 	char message[512];
 };
 #pragma pack(pop)
@@ -151,6 +162,14 @@ struct StartGameMessage
 {
 	int typeID;
 	int start;
+};
+#pragma pack(pop)
+#pragma pack(push, 1)
+struct GameWinMessage
+{
+	int typeId;
+	int guid;
+	int winnerNum;
 };
 #pragma pack(pop)
 #pragma endregion
